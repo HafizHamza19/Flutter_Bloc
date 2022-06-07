@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterblock/bloc/internetBloc/internetbloc.dart';
 import 'package:flutterblock/bloc/login_bloc.dart';
 import 'package:flutterblock/bloc/register_bloc.dart';
 import 'package:flutterblock/screens/login_screen.dart';
@@ -19,12 +21,15 @@ class MyApp extends StatelessWidget {
         Provider<LoginBloc>(create: (context) => LoginBloc()),
         Provider<RegisterBloc>(create: (context) => RegisterBloc())
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: BlocProvider(
+        create: (context) => InternetBloc(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const LoginScreen(),
         ),
-        home: const LoginScreen(),
       ),
     );
   }

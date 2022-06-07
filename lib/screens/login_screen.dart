@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterblock/bloc/internetBloc/internetState.dart';
 import 'package:flutterblock/bloc/login_bloc.dart';
 import 'package:flutterblock/screens/register_screen.dart';
 import 'package:flutterblock/theme/colors.dart';
@@ -15,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   bool isVisible = true;
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<LoginBloc>(context, listen: false);
@@ -155,6 +158,47 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                           ),
                         ])),
+                        //for both ui and background
+                        /* BlocConsumer<InternetBloc, InternetState>(
+                            listener: (context, state) {
+                          if (state is InternetGainedState) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Connected!"),
+                              backgroundColor: Colors.green,
+                            ));
+                          } else if (state is InternetLostState) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Connection Lost"),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
+                        }, builder: (context, state) {
+                          if (state is InternetLostState) {
+                            return const Text("Internet Lost");
+                          } else if (state is InternetGainedState) {
+                            return const Text("Internet Connected");
+                          } else {
+                            return const Text("Loading...");
+                          }
+                        }),*/
+                        //only for background if need only in UI so use BlocBuilder
+                        BlocListener(listener: (context, state) {
+                          if (state is InternetGainedState) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Connected!"),
+                              backgroundColor: Colors.green,
+                            ));
+                          } else if (state is InternetLostState) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Connection Lost"),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
+                        })
                       ]),
                 ),
               ),
