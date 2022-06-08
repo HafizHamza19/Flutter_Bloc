@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutterblock/bloc/internetBloc/internetState.dart';
 import 'package:flutterblock/bloc/login_bloc.dart';
+import 'package:flutterblock/cubits/internetCubit.dart';
 import 'package:flutterblock/screens/register_screen.dart';
 import 'package:flutterblock/theme/colors.dart';
 import 'package:provider/provider.dart';
@@ -158,8 +158,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                           ),
                         ])),
-                        //for both ui and background
-                        /* BlocConsumer<InternetBloc, InternetState>(
+
+                        //bloc for both ui and background
+
+                        /*  BlocConsumer<InternetBloc, InternetState>(
                             listener: (context, state) {
                           if (state is InternetGainedState) {
                             ScaffoldMessenger.of(context)
@@ -183,22 +185,71 @@ class _LoginScreenState extends State<LoginScreen> {
                             return const Text("Loading...");
                           }
                         }),*/
-                        //only for background if need only in UI so use BlocBuilder
-                        BlocListener(listener: (context, state) {
-                          if (state is InternetGainedState) {
+                        //Cubits for both ui and background
+
+                        /*BlocConsumer<InternetCubit, InternetStateCubit>(
+                            listener: (context, state) {
+                          if (state == InternetStateCubit.gained) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text("Connected!"),
                               backgroundColor: Colors.green,
                             ));
-                          } else if (state is InternetLostState) {
+                          } else if (state == InternetStateCubit.lost) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text("Connection Lost"),
                               backgroundColor: Colors.red,
                             ));
                           }
-                        })
+                        }, builder: (context, state) {
+                          if (state == InternetStateCubit.lost) {
+                            return const Text("Internet Lost");
+                          } else if (state == InternetStateCubit.gained) {
+                            return const Text("Internet Connected");
+                          } else {
+                            return const Text("Loading...");
+                          }
+                        }),*/
+                        //only for background if need only in UI so use BlocBuilder
+
+                        /*BlocListener<InternetBloc, InternetState>(
+                          listener: (context, state) {
+                            if (state is InternetGainedState) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Connected!"),
+                                backgroundColor: Colors.green,
+                              ));
+                            } else if (state is InternetLostState) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Connection Lost"),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
+                          child: Container(),
+                        ),*/
+                        //Cubits
+                        BlocListener<InternetCubit, InternetStateCubit>(
+                          listener: (context, state) {
+                            if (state == InternetStateCubit.gained) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Connected!"),
+                                backgroundColor: Colors.green,
+                              ));
+                            } else if (state == InternetStateCubit.lost) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Connection Lost"),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
+                          child: Container(),
+                        )
                       ]),
                 ),
               ),

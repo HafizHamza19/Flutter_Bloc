@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterblock/bloc/internetBloc/internetbloc.dart';
 import 'package:flutterblock/bloc/login_bloc.dart';
 import 'package:flutterblock/bloc/register_bloc.dart';
+import 'package:flutterblock/cubits/internetCubit.dart';
 import 'package:flutterblock/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +22,14 @@ class MyApp extends StatelessWidget {
         Provider<LoginBloc>(create: (context) => LoginBloc()),
         Provider<RegisterBloc>(create: (context) => RegisterBloc())
       ],
-      child: BlocProvider(
-        create: (context) => InternetBloc(),
+      //for single bloc
+      child: /*BlocProvider(
+        create: (context) => InternetBloc(),*/
+          MultiBlocProvider(
+        providers: [
+          BlocProvider<InternetCubit>(create: (context) => InternetCubit()),
+          BlocProvider<InternetBloc>(create: (context) => InternetBloc())
+        ],
         child: MaterialApp(
           title: 'Flutter Demo',
           theme: ThemeData(
